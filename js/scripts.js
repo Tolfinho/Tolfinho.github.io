@@ -77,7 +77,7 @@ function generateBall() {
     if (balls.length >= 5) {
       endGame();
     }
-  }, 3000);
+  }, 500);
 }
 generateBall();
 

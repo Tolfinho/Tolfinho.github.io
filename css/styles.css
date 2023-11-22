@@ -1,0 +1,41 @@
+.hero {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 30px;
+}
+
+.hero .ui {
+  display: flex;
+  align-items: center;
+  gap: 30px;
+}
+
+.hero .ui #score,
+.hero .ui #lifes {
+  font-size: 20px;
+  font-weight: 800;
+}
+
+canvas {
+  width: 1280px;
+  height: 700px;
+}
+
+#mira {
+  width: 25px;
+  height: 25px;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 100;
+}
+
+#mira img {
+  width: 100%;
+  height: 100%;
+}

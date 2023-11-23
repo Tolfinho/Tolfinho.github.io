@@ -129,6 +129,6 @@ function renderGameUI() {
 
 function endGame() {
   const a = document.createElement('a');
-  a.href = `http://127.0.0.1:5500/matchReview.html?score=${score}`;
+  a.href = `../pages/matchReview.html?score=${score}`;
   a.click();
 }

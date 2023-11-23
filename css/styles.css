@@ -21,21 +21,27 @@
   font-weight: 800;
 }
 
-canvas {
+.canvas {
   width: 1280px;
   height: 700px;
+  position: relative;
+  cursor: none;
 }
 
-#mira {
-  width: 25px;
-  height: 25px;
-  position: absolute;
-  top: 0;
-  left: 0;
-  z-index: 100;
-}
-
-#mira img {
+.canvas canvas {
   width: 100%;
   height: 100%;
+}
+
+.canvas #aim {
+  position: absolute;
+  left: 30px;
+  top: 30px;
+  transform: translate(-50%, -50%);
+  z-index: 100;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: yellow;
+  pointer-events: none;
 }

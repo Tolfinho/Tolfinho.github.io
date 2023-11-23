@@ -8,7 +8,7 @@ canvas.width = CANVAS_WIDTH;
 canvas.height = CANVAS_HEIGHT;
 
 const image = new Image();
-image.src = '../assets/img/gameBackground2.png';
+image.src = '../assets/img/gameBackground.jpg';
 c.drawImage(image, 0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
 
 //c.fillStyle = 'black';
@@ -20,6 +20,8 @@ let score = 0;
 let lifes = 5;
 let muted = false;
 let ballSpawnSpeed = null;
+
+const aim = document.getElementById('aim');
 
 // Classes
 class Ball {
@@ -102,8 +104,9 @@ function animate() {
 
 function generateBall() {
   let interval = setInterval(() => {
-    let x = Math.floor(Math.random() * (canvas.width - 100));
-    let y = Math.floor(Math.random() * (canvas.height - 100));
+    let validPosition = false;
+    var x = Math.floor(Math.random() * (canvas.width - 100));
+    var y = Math.floor(Math.random() * (canvas.height - 100));
 
     const newBall = new Ball({ x: x, y: y }, 100);
     balls.push(newBall);
@@ -116,8 +119,6 @@ function generateBall() {
 
 function checkBallClick(e) {
   var aux = false;
-
-  console.log(e);
 
   balls.map((ball, index) => {
     if (
@@ -157,6 +158,11 @@ canvas.addEventListener('mousedown', (e) => {
       endGame();
     }
   }
+});
+
+canvas.addEventListener('mousemove', (e) => {
+  aim.style.left = e.offsetX + 'px';
+  aim.style.top = e.offsetY + 'px';
 });
 
 function renderGameUI() {

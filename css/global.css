@@ -6,10 +6,6 @@
   user-select: none;
 }
 
-body {
-  overflow: hidden;
-}
-
 button {
   cursor: pointer;
   border: none;

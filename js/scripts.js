@@ -8,7 +8,7 @@ canvas.width = CANVAS_WIDTH;
 canvas.height = CANVAS_HEIGHT;
 
 const image = new Image();
-image.src = '../img/gameBackground2.png';
+image.src = '../assets/img/gameBackground2.png';
 c.drawImage(image, 0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
 
 //c.fillStyle = 'black';
@@ -18,6 +18,8 @@ c.drawImage(image, 0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
 let balls = [];
 let score = 0;
 let lifes = 5;
+let muted = false;
+let ballSpawnSpeed = null;
 
 // Classes
 class Ball {
@@ -43,10 +45,40 @@ class Ball {
 }
 
 window.addEventListener('load', (e) => {
-  initGame();
+  const queryString = window.location.search;
+  const urlParams = new URLSearchParams(queryString);
+  const dificuldade = urlParams.get('dificuldade');
+
+  switch (dificuldade) {
+    case 'facil':
+      ballSpawnSpeed = 800;
+      console.log('facil');
+      break;
+    case 'medio':
+      ballSpawnSpeed = 500;
+      console.log('medio');
+      break;
+    case 'dificil':
+      ballSpawnSpeed = 350;
+      console.log('dificil');
+      break;
+    case 'ranked':
+      ballSpawnSpeed = 350;
+      console.log('ranked');
+      break;
+    default:
+      console.log('none');
+      break;
+  }
+
+  // prevents unwanted renders
+  if (ballSpawnSpeed !== null) {
+    initGame();
+  }
 });
 function initGame() {
   animate();
+  generateBall();
 }
 
 // Game Loop
@@ -57,9 +89,11 @@ function animate() {
 
   c.drawImage(image, 0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
 
-  balls.map((ball) => {
-    ball.update();
-  });
+  if (balls.length > 0) {
+    balls.map((ball) => {
+      ball.update();
+    });
+  }
 
   renderGameUI();
 
@@ -77,9 +111,8 @@ function generateBall() {
     if (balls.length >= 5) {
       endGame();
     }
-  }, 350);
+  }, ballSpawnSpeed);
 }
-generateBall();
 
 function checkBallClick(e) {
   var aux = false;
@@ -105,13 +138,20 @@ function checkBallClick(e) {
   return aux;
 }
 
-canvas.addEventListener('click', (e) => {
+canvas.addEventListener('mousedown', (e) => {
   // console.log(checkBallClick(e));
   if (checkBallClick(e)) {
     //user +1 points
     score = score + 10;
+    if (muted === false) {
+      playAudio('success');
+    }
   } else {
     lifes = lifes - 1;
+    if (muted === false) {
+      playAudio('missed');
+    }
+
     // check end game
     if (lifes <= 0) {
       endGame();
@@ -125,6 +165,19 @@ function renderGameUI() {
 
   scoreDiv.innerHTML = `Pontuação: ${score}`;
   lifesDiv.innerHTML = `Vidas: ${lifes}`;
+}
+
+function playAudio(type) {
+  var audio = new Audio();
+
+  if (type === 'success') {
+    audio.src = '../assets/audios/shoot.wav';
+    audio.play();
+  } else if (type === 'missed') {
+    audio.src = '../assets/audios/wrong.wav';
+    audio.volume = 0.2;
+    audio.play();
+  }
 }
 
 function endGame() {

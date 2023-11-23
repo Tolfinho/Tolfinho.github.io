@@ -9,3 +9,8 @@
 body {
   overflow: hidden;
 }
+
+button {
+  cursor: pointer;
+  border: none;
+}

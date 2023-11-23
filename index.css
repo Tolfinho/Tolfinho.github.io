@@ -1,0 +1,85 @@
+.hide {
+  display: none !important;
+}
+
+.hero {
+  width: 100%;
+  height: 100vh;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  background-color: black;
+}
+
+.hero video {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  left: 0;
+  top: 0;
+  object-fit: cover;
+  z-index: 0;
+  opacity: 0.08;
+}
+
+.hero .content {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  z-index: 10;
+}
+
+.hero .content .playBtn {
+  font-size: 80px;
+  font-weight: 500;
+  color: #fff;
+  text-decoration: none;
+  background: none;
+  padding: 5px 15px;
+  transition: all 0.3s ease;
+  display: block;
+}
+
+.hero .content .playBtn:hover {
+  background: #fff;
+  color: #000;
+}
+
+.hero .content .gamemodeForm {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 500px;
+  padding: 30px 40px;
+  background: rgba(230, 230, 230, 1);
+  border-radius: 5px;
+}
+
+.hero .content .gamemodeForm label {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.hero .content .gamemodeForm label span.label {
+  font-size: 22px;
+}
+
+.hero .content .gamemodeForm label select {
+  width: 100%;
+  height: 30px;
+  border-radius: 3px;
+  font-size: 16px;
+}
+
+.hero .content .gamemodeForm button {
+  width: 100%;
+  height: 30px;
+  background: blue;
+  margin-top: 10px;
+  color: #fff;
+  font-size: 18px;
+  border-radius: 3px;
+}

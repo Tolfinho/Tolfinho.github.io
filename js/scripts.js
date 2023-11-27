@@ -1,8 +1,9 @@
 const canvas = document.getElementById('canvas');
 const c = canvas.getContext('2d');
 
-const CANVAS_WIDTH = 1280;
-const CANVAS_HEIGHT = 700;
+console.log(window.outerWidth);
+const CANVAS_WIDTH = window.innerWidth;
+const CANVAS_HEIGHT = window.innerHeight;
 
 canvas.width = CANVAS_WIDTH;
 canvas.height = CANVAS_HEIGHT;
@@ -20,6 +21,8 @@ let score = 0;
 let lifes = 5;
 let muted = false;
 let ballSpawnSpeed = null;
+let modo;
+let dificuldade;
 
 const aim = document.getElementById('aim');
 
@@ -29,11 +32,17 @@ class Ball {
   static posY;
   static width;
   static height;
+  static dirX;
+  static dirY;
+  static contFrames;
 
   constructor(position, radius) {
     this.posX = position.x;
     this.posY = position.y;
     this.radius = radius;
+    this.dirY = null;
+    this.dirX = null;
+    this.contFrames = 0;
   }
 
   draw() {
@@ -42,14 +51,47 @@ class Ball {
   }
 
   update() {
+    if (modo === 'flick-moving') {
+      if (this.dirX === null || this.dirY === null) {
+        this.sortDirections();
+      }
+
+      this.contFrames++;
+
+      if (this.contFrames >= 5) {
+        this.posX = this.posX + this.dirX;
+        this.posY = this.posY + this.dirY;
+
+        this.contFrames = 0;
+      }
+    }
+
     this.draw();
+  }
+
+  sortDirections() {
+    var sortX = Math.floor(Math.random() * 2);
+    var sortY = Math.floor(Math.random() * 2);
+
+    if (sortX === 0) {
+      this.dirX = 1;
+    } else if (sortX === 1) {
+      this.dirX = -1;
+    }
+
+    if (sortY === 0) {
+      this.dirY = 1;
+    } else if (sortY === 1) {
+      this.dirY = -1;
+    }
   }
 }
 
 window.addEventListener('load', (e) => {
   const queryString = window.location.search;
   const urlParams = new URLSearchParams(queryString);
-  const dificuldade = urlParams.get('dificuldade');
+  dificuldade = urlParams.get('dificuldade');
+  modo = urlParams.get('modo');
 
   switch (dificuldade) {
     case 'facil':
@@ -97,7 +139,7 @@ function animate() {
     });
   }
 
-  renderGameUI();
+  //renderGameUI();
 
   window.requestAnimationFrame(animate);
 }

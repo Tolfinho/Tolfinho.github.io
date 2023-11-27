@@ -1,0 +1,2 @@
+-> script file could be a main file that calls other js files according to the mode and difficulty choosen
+-> make canvas full page width without scroll problem...currently its being resolved with overflow-hidden(not ideal)

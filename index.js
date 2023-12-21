@@ -9,6 +9,8 @@ import {
   signOut,
 } from 'https://www.gstatic.com/firebasejs/10.6.0/firebase-auth.js';
 
+import { getFirestore } from 'https://www.gstatic.com/firebasejs/10.6.0/firebase-firestore.js';
+
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -29,6 +31,7 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const analytics = getAnalytics(app);
 
+export const db = getFirestore(app);
 export const auth = getAuth(app);
 
 function onAuthChanged() {
@@ -37,8 +40,10 @@ function onAuthChanged() {
       // User is signed in
       const uid = user.uid;
       localStorage.setItem('user', uid);
+      console.log('auth changed -> sign in');
     } else {
       // User is signed out
+      console.log('auth changed -> sign out');
       localStorage.setItem('user', 'none');
     }
   });
@@ -49,6 +54,10 @@ function signOutUser() {
   signOut(auth)
     .then(() => alert('usuário deslogado'))
     .catch((error) => alert('erro ao deslogar usuário'));
+}
+
+function getCurrentUser() {
+  return localStorage.getItem('user');
 }
 
 window.addEventListener('load', () => {
@@ -76,6 +85,11 @@ window.addEventListener('load', () => {
     (e) => (dificuldade = e.target.value)
   );
   const gamemodeForm = document.getElementById('gamemodeForm');
+
+  const signOutBtn = document.getElementById('signOutBtn');
+  signOutBtn.addEventListener('click', (e) => {
+    signOutUser();
+  });
 
   function showGamemodeForm(e) {
     e.preventDefault();

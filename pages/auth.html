@@ -3,46 +3,68 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="../css/global.css" />
+    <link rel="stylesheet" href="../css/styles.css" />
+    <link rel="stylesheet" href="../css/auth.css" />
+
     <title>Aim Training - Auth</title>
   </head>
   <body>
-    <form>
-      <input
-        type="email"
-        name="email"
-        id="emailRegister"
-        placeholder="email"
-        autocomplete="off"
-        required />
-      <input
-        type="password"
-        name="password"
-        id="passwordRegister"
-        placeholder="senha"
-        autocomplete="off"
-        required />
-      <button id="registerBtn">register</button>
-    </form>
+    <div class="auth-hero">
+      <div class="auth-content">
+        <div class="buttonsWrap">
+          <div class="authButton active" id="registerBtn">Cadastre-se</div>
+          <div class="authButton" id="loginBtn">Entrar</div>
+          <div
+            class="authButton buttonBackground register"
+            id="buttonBackground"></div>
+        </div>
+        <form id="registerForm">
+          <input
+            type="text"
+            name="username"
+            id="username"
+            placeholder="Nome de usuário"
+            autocomplete="off"
+            required />
+          <input
+            type="email"
+            name="email"
+            id="emailRegister"
+            placeholder="Email"
+            autocomplete="off"
+            required />
+          <input
+            type="password"
+            name="password"
+            id="passwordRegister"
+            placeholder="Senha"
+            autocomplete="off"
+            required />
+          <button id="registerSubmitBtn">Pronto</button>
+        </form>
 
-    <form>
-      <input
-        type="email"
-        name="email"
-        id="emailLogin"
-        placeholder="email"
-        autocomplete="off"
-        required />
-      <input
-        type="password"
-        name="password"
-        id="passwordLogin"
-        placeholder="senha"
-        autocomplete="off"
-        required />
-      <button id="loginBtn">login</button>
-    </form>
-
-    <button>Sair</button>
+        <form class="hide" id="loginForm">
+          <input
+            type="email"
+            name="email"
+            id="emailLogin"
+            placeholder="Email"
+            autocomplete="off"
+            required />
+          <input
+            type="password"
+            name="password"
+            id="passwordLogin"
+            placeholder="Senha"
+            autocomplete="off"
+            required />
+          <button id="loginSubmitBtn">Pronto</button>
+        </form>
+      </div>
+    </div>
 
     <script type="module" src="../js/auth.js"></script>
   </body>

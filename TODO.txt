@@ -1,2 +1,11 @@
 -> script file could be a main file that calls other js files according to the mode and difficulty choosen
 -> make canvas full page width without scroll problem...currently its being resolved with overflow-hidden(not ideal)
+
+1 - make auth page (visual) - done
+2 - finish auth methods(getCurrentUser)
+3 - make validations for create new account
+4 - add display name on create new account
+5 - add database to the project
+6 - save highscore of current user on a table(rank global)
+7 - change font of project and improve main manu page
+8 - fix menu, mode=null or dificulty=null must show and error and not to redirect

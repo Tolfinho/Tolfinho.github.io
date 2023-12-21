@@ -28,3 +28,77 @@
   text-decoration: none;
   font-weight: 700;
 }
+
+.matchReviewContainer .placarGlobal-container {
+  width: 500px;
+  height: 500px;
+  background: rgba(0, 0, 0, 0.1);
+  margin-top: 30px;
+  padding: 20px;
+  border-radius: 8px;
+}
+
+.matchReviewContainer .placarGlobal-container h2 {
+  text-align: center;
+}
+
+.matchReviewContainer .placarGlobal-container .placarGlobal-list {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  margin-top: 10px;
+}
+
+.matchReviewContainer
+  .placarGlobal-container
+  .placarGlobal-list
+  .placarGlobal-line {
+  display: flex;
+  width: 100%;
+  height: 40px;
+  align-items: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border-radius: 5px;
+}
+
+.matchReviewContainer
+  .placarGlobal-container
+  .placarGlobal-list
+  .placarGlobal-line:hover {
+  background: rgba(0, 0, 0, 0.2);
+}
+
+.matchReviewContainer
+  .placarGlobal-container
+  .placarGlobal-list
+  .placarGlobal-line
+  div {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.matchReviewContainer
+  .placarGlobal-container
+  .placarGlobal-list
+  .placarGlobal-line
+  div:nth-child(1) {
+  width: 15%;
+}
+
+.matchReviewContainer
+  .placarGlobal-container
+  .placarGlobal-list
+  .placarGlobal-line
+  div:nth-child(2) {
+  width: 60%;
+}
+
+.matchReviewContainer
+  .placarGlobal-container
+  .placarGlobal-list
+  .placarGlobal-line
+  div:nth-child(3) {
+  width: 25%;
+}

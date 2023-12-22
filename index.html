@@ -8,22 +8,25 @@
     <link rel="stylesheet" href="css/global.css" />
     <link rel="stylesheet" href="index.css" />
 
-    <title>AimLab Clone - Menu</title>
+    <title>AimTraining - Menu</title>
   </head>
   <body>
     <div class="hero">
       <video src="assets/videos/menuVideo.mov" autoplay loop muted></video>
       <div class="content">
-        <button class="playBtn" id="playBtn">Jogar</button>
-        <a href="./pages/auth.html" id="authLink">Autenticar</a>
-        <div style="color: white" id="signOutBtn">Sair</div>
+        <div class="buttonsContainer" id="buttonsContainer">
+          <button class="playBtn button" id="playBtn">Jogar</button>
+          <a href="./pages/auth.html" class="button" id="authLink"
+            >Autenticar</a
+          >
+          <div class="button" id="signOutBtn">Sair</div>
+        </div>
         <form class="gamemodeForm hide" id="gamemodeForm">
           <label>
             <span class="label">Escolha o modo:</span>
             <select name="modo" id="modo">
               <option value="null">-- Selecione uma opção --</option>
               <option value="flick">Flick</option>
-              <option value="flick-moving">Flick Moving</option>
             </select>
           </label>
 
@@ -34,12 +37,10 @@
               <option value="facil">Fácil</option>
               <option value="medio">Médio</option>
               <option value="dificil">Difícil</option>
-              <option value="ranked">Ranqueado</option>
             </select>
           </label>
 
           <button id="linkToGame">Bora!</button>
-          <div onclick="register()">register</div>
         </form>
       </div>
     </div>

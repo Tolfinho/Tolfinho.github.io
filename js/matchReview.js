@@ -30,9 +30,6 @@ window.addEventListener('load', async (e) => {
   //console.log('Score -> ' + score);
   //console.log('Recorde -> ' + highscore);
 
-  const highscoreDiv = document.getElementById('highScore');
-  highscoreDiv.innerHTML = `Recorde: ${highscore}`;
-
   if (localStorage.getItem('user') !== 'none') {
     const uid = localStorage.getItem('user');
 
@@ -58,7 +55,9 @@ window.addEventListener('load', async (e) => {
       console.log('Usuário não encontrado!');
     }
   } else {
-    console.log('usuário nao está logado, nao vai salvar no placar global');
+    alert(
+      'Como você não está autenticado, não vai poder salvar seu progresso no placar Global. Autentique-se e alcance o TOP 1!'
+    );
   }
 
   // Mostra o placar global
@@ -134,4 +133,6 @@ window.addEventListener('load', async (e) => {
       placarGlobalList.appendChild(div);
     });
   }
+
+  function playAgain() {}
 });

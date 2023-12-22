@@ -230,6 +230,6 @@ function playAudio(type) {
 
 function endGame() {
   const a = document.createElement('a');
-  a.href = `../pages/matchReview.html?score=${score}&dificuldade=${dificuldade}`;
+  a.href = `../pages/matchReview.html?score=${score}&dificuldade=${dificuldade}&modo=${modo}`;
   a.click();
 }

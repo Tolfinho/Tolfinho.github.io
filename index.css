@@ -31,8 +31,16 @@
   z-index: 10;
 }
 
-.hero .content .playBtn {
-  font-size: 80px;
+.hero .content .buttonsContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  align-items: center;
+  justify-content: center;
+}
+
+.hero .content .buttonsContainer .button {
+  font-size: 40px;
   font-weight: 500;
   color: #fff;
   text-decoration: none;
@@ -40,11 +48,16 @@
   padding: 5px 15px;
   transition: all 0.3s ease;
   display: block;
+  cursor: pointer;
 }
 
-.hero .content .playBtn:hover {
+.hero .content .button:hover {
   background: #fff;
   color: #000;
+}
+
+.hero .content .buttonsContainer .playBtn {
+  font-size: 80px;
 }
 
 .hero .content .gamemodeForm {

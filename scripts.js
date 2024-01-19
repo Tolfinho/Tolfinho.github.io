@@ -16,11 +16,10 @@ class InputHandler {
         this.game.currentPiece.x -= this.game.squareWidth;
       } else if (e.key === 'ArrowRight' && this.game.isFree('right')) {
         this.game.currentPiece.x += this.game.squareWidth;
-      } else if (e.key === 'ArrowDown') {
+      } else if (e.key === 'ArrowDown' && this.game.isFree('down')) {
         this.game.currentPiece.y += this.game.squareHeight;
       } else if (e.key === 'ArrowUp') {
         this.game.currentPiece.matrixToRight();
-        s;
       }
     });
   }
@@ -234,6 +233,29 @@ class Game {
   generatePiece() {
     this.currentPiece = this.nextPiece;
     this.nextPiece = new Piece(this, Math.floor(Math.random() * 7));
+
+    // Verify if you lose
+    var auxSquares = [];
+
+    for (var i = 0; i < this.currentPiece.matrix.length; i++) {
+      for (var j = 0; j < this.currentPiece.matrix[i].length; j++) {
+        if (this.currentPiece.matrix[i][j] === 1) {
+          auxSquares.push({
+            x: this.currentPiece.x + j * this.squareWidth,
+            y: this.currentPiece.y + i * this.squareHeight,
+          });
+        }
+      }
+    }
+
+    if (this.isColliding(auxSquares)) {
+      alert('Você perdeu, tentar novamente!');
+      this.restartGame();
+    }
+  }
+
+  restartGame() {
+    startGame();
   }
 
   isColliding(squares) {
@@ -250,10 +272,14 @@ class Game {
     for (var i = 0; i < this.area.squares.length; i++) {
       for (var j = 0; j < squares.length; j++) {
         if (
-          squares[j].y + this.squareHeight >= this.area.squares[i].y &&
-          squares[j].x === this.area.squares[i].x
-        )
+          squares[j].y + this.squareHeight === this.area.squares[i].y &&
+          squares[j].x === this.area.squares[i].x &&
+          res === false
+        ) {
+          //console.log('Square Bottom -> ' + (squares[j].y + this.squareHeight));
+          //console.log('Area Square Top -> ' + this.area.squares[i].y);
           res = true;
+        }
       }
     }
 
@@ -264,12 +290,41 @@ class Game {
     var response = true;
 
     this.currentPiece.squares.forEach((square) => {
+      // verify game borders
       if (square.x === 0 && direction === 'left') response = false;
       else if (
         square.x + this.squareWidth === this.width &&
         direction === 'right'
       )
         response = false;
+      else if (
+        square.y + this.squareHeight === this.height &&
+        direction === 'down'
+      ) {
+        response = false;
+      }
+
+      // Verify other area pieces
+      this.area.squares.forEach((areaSquare) => {
+        if (
+          square.x === areaSquare.x + this.squareWidth &&
+          square.y === areaSquare.y &&
+          direction === 'left'
+        )
+          response = false;
+        else if (
+          square.x + this.squareWidth === areaSquare.x &&
+          square.y === areaSquare.y &&
+          direction === 'right'
+        )
+          response = false;
+        else if (
+          square.y + this.squareHeight === areaSquare.y &&
+          square.x === areaSquare.x &&
+          direction === 'down'
+        )
+          response = false;
+      });
     });
 
     return response;
@@ -334,11 +389,20 @@ class Game {
     nextPieceEl.innerHTML = '';
 
     scoreEl.appendChild(document.createTextNode(this.score));
-    timerEl.appendChild(document.createTextNode(this.gameTime));
+
+    let min = Math.floor(this.gameTime / 60);
+    if (min < 10) min = '0' + min;
+    let sec = this.gameTime % 60;
+    if (sec < 10) sec = '0' + sec;
+    timerEl.appendChild(document.createTextNode(min + ':' + sec));
   }
 }
 
-const game = new Game(canvas.width, canvas.height);
+let game;
+function startGame() {
+  game = new Game(canvas.width, canvas.height);
+}
+startGame();
 
 let lastTime = 0;
 

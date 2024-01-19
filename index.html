@@ -7,17 +7,46 @@
     <!-- CSS -->
     <link rel="stylesheet" href="./styles.css" />
 
+    <!-- FONTS -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Climate+Crisis&display=swap"
+      rel="stylesheet" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Rubik+Broken+Fax&display=swap"
+      rel="stylesheet" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Salsa&display=swap"
+      rel="stylesheet" />
+
     <title>Tetris</title>
   </head>
   <body>
-    <img src="./assets/tetris-logo.png" alt="logo" class="logo" />
+    <!-- Pieces Images -->
+    <img src="" alt="" />
 
-    <div class="uiContainer">
-      <div>Tempo: <span id="timer"></span></div>
-      <div>Pontos: <span id="score"></span></div>
-      <div>Próximo: <span id="nextPiece"></span></div>
+    <div class="hero">
+      <div class="logoContainer">
+        <h1 class="logo">TETRIS</h1>
+      </div>
+
+      <div class="canvasContainer"><canvas id="canvas"></canvas></div>
+
+      <div class="uiContainer">
+        <div><span class="subtitle">Tempo</span> <span id="timer"></span></div>
+        <div><span class="subtitle">Pontos</span> <span id="score"></span></div>
+        <div>
+          <span class="subtitle">Próximo</span> <span id="nextPiece"></span>
+        </div>
+      </div>
     </div>
-    <canvas id="canvas"></canvas>
 
     <script src="./scripts.js"></script>
   </body>

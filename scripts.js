@@ -12,13 +12,23 @@ class InputHandler {
     this.game = game;
 
     document.addEventListener('keydown', (e) => {
-      if (e.key === 'ArrowLeft' && this.game.isFree('left')) {
+      console.log(e.key);
+      if (
+        (e.key === 'ArrowLeft' || e.key === 'a') &&
+        this.game.isFree('left')
+      ) {
         this.game.currentPiece.x -= this.game.squareWidth;
-      } else if (e.key === 'ArrowRight' && this.game.isFree('right')) {
+      } else if (
+        (e.key === 'ArrowRight' || e.key === 'd') &&
+        this.game.isFree('right')
+      ) {
         this.game.currentPiece.x += this.game.squareWidth;
-      } else if (e.key === 'ArrowDown' && this.game.isFree('down')) {
+      } else if (
+        (e.key === 'ArrowDown' || e.key === 's') &&
+        this.game.isFree('down')
+      ) {
         this.game.currentPiece.y += this.game.squareHeight;
-      } else if (e.key === 'ArrowUp') {
+      } else if (e.key === 'ArrowUp' || e.key === 'w') {
         this.game.currentPiece.matrixToRight();
       }
     });

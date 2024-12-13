@@ -7,10 +7,15 @@ canvas.height = 800;
 var player;
 var enemies = [];
 var bullets = [];
+var experiences = [];
 var mousePosition = { x: 0, y: 0 };
 var sec = 0;
 var min = 0;
-var enemyBaseLife = 10;
+var enemiesToSpawn = [];
+var xp = 0;
+var level = 0;
+var xpLastLevel = 0;
+var xpToNextLevel = 0;
 
 /*
 *   Classes
@@ -59,13 +64,14 @@ class Player {
 
 class Enemy {
 
-    constructor(x, y, width, height, speed, life){
+    constructor(x, y, width, height, speed, life, enemyType){
         this.x = x;
         this.y = y;
         this.width = width;
         this.height = height;
         this.speed = speed;
         this.life = life;
+        this.enemyType = enemyType;
     }
 
     update(){
@@ -130,6 +136,26 @@ class Bullet {
 
 }
 
+class Experience {
+
+    constructor(x, y, width, height){
+        this.x = x;
+        this.y = y;
+        this.width = width;
+        this.height = height;
+    }
+
+    update(){
+
+    }
+
+    draw(){
+        c.fillStyle = "#fff";
+        c.fillRect(this.x, this.y, this.width, this.height);
+    }
+
+}
+
 startGame();
 function startGame() {
     drawScreen();
@@ -159,7 +185,8 @@ function restartGame(){
 var then = Date.now();
 var fps = 60;
 
-var spawnEnemyTicks = 80;
+var spawnEnemyTicksCurrent = 0;
+var spawnEnemyTicksTarget = 80;
 var spawnBulletTicks = 0;
 function animate () {
     var now = Date.now();
@@ -172,11 +199,50 @@ function animate () {
         player.draw();
 
         // Enemies handler
-        this.spawnEnemyTicks++;
-        if(spawnEnemyTicks >= 100){
-            this.spawnEnemyTicks = 0;
-            const {enemyX, enemyY} = getEnemySpawnPositions();
-            this.enemies.push(new Enemy(enemyX, enemyY, 60, 60, 2, enemyBaseLife));
+        var rounds = Math.floor((min*60 + sec)/30);
+        // A quantidade de segundos dividida por 30
+        // A cada 30 segundos adiciona a possibilidade de spwan para um novo inimigo
+        if(rounds === 0 && !enemiesToSpawn.includes("galinha")){
+            enemiesToSpawn.push("galinha");
+            spawnEnemyTicksTarget = 60;
+        }
+        else if(rounds === 1 && !enemiesToSpawn.includes("porco")){
+            enemiesToSpawn.push("porco");
+            spawnEnemyTicksTarget = 50;
+        }
+        else if(rounds === 2 && !enemiesToSpawn.includes("vaca")){
+            enemiesToSpawn.push("vaca");
+            spawnEnemyTicksTarget = 45;
+        }
+        else if(rounds === 3 && !enemiesToSpawn.includes("cavalo")){
+            enemiesToSpawn.push("cavalo");
+            spawnEnemyTicksTarget = 40;
+        }
+        else if(rounds === 4 && !enemiesToSpawn.includes("touro")){
+            enemiesToSpawn.push("touro");
+            spawnEnemyTicksTarget = 35;
+        }
+        this.spawnEnemyTicksCurrent++;
+        if(spawnEnemyTicksCurrent >= spawnEnemyTicksTarget){
+            this.spawnEnemyTicksCurrent = 0;
+            const {x, y, enemyType} = getEnemySpawnPositions();
+            switch(enemyType){
+                case "galinha":
+                    this.enemies.push(new Enemy(x, y, 35, 35, 2, 10, enemyType));
+                    break;
+                case "porco":
+                    this.enemies.push(new Enemy(x, y, 40, 40, 2, 20, enemyType));
+                    break;
+                case "vaca":
+                    this.enemies.push(new Enemy(x, y, 50, 50, 2, 25, enemyType));
+                    break;
+                case "cavalo":
+                    this.enemies.push(new Enemy(x, y, 45, 45, 3, 30, enemyType));
+                    break;
+                case "touro":
+                    this.enemies.push(new Enemy(x, y, 50, 50, 3, 40, enemyType));
+                    break;
+            }
         }
         if(this.enemies.length > 0){
             this.enemies.forEach((enemy) => {
@@ -199,8 +265,16 @@ function animate () {
         }
         bulletCollisionWithEnemy();
         bulletOutOfMap();
-        playerCollisionWithEnemies();
 
+        // Experience handler
+        if(experiences.length > 0){
+            experiences.forEach((experience) => experience.draw())
+        }
+
+        // Player handler
+        playerCollisionWithEnemies();
+        playerCollisionWithExperiences();
+        
         drawGameHud();
 
         then = now;
@@ -265,11 +339,23 @@ function drawScreen(){
 }
 
 function drawGameHud(){
+    // Timer
     var seconds = sec < 10 ? "0"+sec : sec;
     var minutes = min < 10 ? "0"+min : min;
     c.fillStyle = "#fff";
     c.font = "40px Tiny5"
     c.fillText(minutes+":"+seconds, 20, 40)
+
+    // Game level
+    var xpBarWidth = 300;
+    var xpBarHeight = 20;
+    c.fillStyle = "#fff";
+    c.fillRect(canvas.width - xpBarWidth - 20, 20, xpBarWidth, xpBarHeight);
+    c.fillStyle = "#f00";
+    c.fillRect(canvas.width - xpBarWidth - 20, 20, (xpBarWidth/(xpToNextLevel-xpLastLevel)) * (xp-xpLastLevel), xpBarHeight);
+    c.fillStyle = "#fff";
+    c.font = "20px sans-serif";
+    c.fillText(level, canvas.width - xpBarWidth - 20 - 30, 38);
 }
 
 const gameTimer = setInterval(() => {
@@ -288,6 +374,7 @@ const gameTimer = setInterval(() => {
 function getEnemySpawnPositions(){
     const orientation = Math.floor(Math.random() * 2);
     const side = Math.floor(Math.random() * 2);
+    const enemyTypeIndex = Math.floor(Math.random() * enemiesToSpawn.length);
 
     var enemyX, enemyY;
 
@@ -307,7 +394,7 @@ function getEnemySpawnPositions(){
         }
     }
 
-    return { enemyX, enemyY }
+    return { x: enemyX, y: enemyY, enemyType: enemiesToSpawn[enemyTypeIndex] }
 }
 
 function bulletCollisionWithEnemy(){
@@ -329,8 +416,11 @@ function bulletCollisionWithEnemy(){
                 bulletIndex = index;
 
                 enemy.life -= 1;
-                if(enemy.life <= 0)
+                if(enemy.life <= 0){
+                    experiences.push(new Experience(enemy.x + Math.floor(enemy.width/2) - 5, enemy.y + Math.floor(enemy.height/2) - 5, 10, 10))
+                    console.log(enemy.width)
                     enemyIndex = index2;
+                }
             }
         })
     })
@@ -374,9 +464,149 @@ function playerCollisionWithEnemies(){
         ){
             player.life--;
             if(player.life <= 0)
-                if(window.confirm("Jogar novamente?"))
-                    restartGame();
+                restartGame();
         }
     })
+
+}
+
+function playerCollisionWithExperiences(){
+    var experienceIndexes = [];
+
+    this.experiences.forEach((experience, index) => {
+
+        if(player.x < experience.x + experience.width &&
+            player.x + player.width > experience.x &&
+            player.y < experience.y + experience.height &&
+            player.y + player.height > experience.y
+        ){
+            experienceIndexes.push(index);
+            xp += 10;
+            if(xp < 100){
+                level = 0;
+                xpLastLevel = 0;
+                xpToNextLevel = 100;
+            }
+            else if(xp < 500) {
+                level = 1;
+                xpLastLevel = 100;
+                xpToNextLevel = 500;
+            }
+            else if(xp < 1000) {
+                level = 2;
+                xpLastLevel = 500;
+                xpToNextLevel = 1000;
+            }
+            else if(xp < 1500) {
+                level = 3;
+                xpLastLevel = 1000;
+                xpToNextLevel = 1500;
+            }
+            else if(xp < 2000) {
+
+                level = 4;
+                xpLastLevel = 1500;
+                xpToNextLevel = 2000;
+            }
+            else if(xp < 2500) {
+
+                level = 5;
+                xpLastLevel = 2000;
+                xpToNextLevel = 2500;
+            }
+            else if(xp < 3000) {
+
+                level = 6;
+                xpLastLevel = 2500;
+                xpToNextLevel = 3000;
+            }
+            else if(xp < 3500) {
+
+                level = 7;
+                xpLastLevel = 3000;
+                xpToNextLevel = 3500;
+            }
+            else if(xp < 4000) {
+
+                level = 8;
+                xpLastLevel = 3500;
+                xpToNextLevel = 4000;
+            }
+            else if(xp < 4500) {
+
+                level = 9;
+                xpLastLevel = 4000;
+                xpToNextLevel = 4500;
+            }
+            else if(xp < 5000) {
+
+                level = 10;
+                xpLastLevel = 4500;
+                xpToNextLevel = 5000;
+            }
+            else if(xp < 5500) {
+
+                level = 11;
+                xpLastLevel = 5000;
+                xpToNextLevel = 5500;
+            }
+            else if(xp < 6000) {
+
+                level = 12;
+                xpLastLevel = 5500;
+                xpToNextLevel = 6000;
+            }
+            else if(xp < 6500) {
+
+                level = 13;
+                xpLastLevel = 6000;
+                xpToNextLevel = 6500;
+            }
+            else if(xp < 7000) {
+
+                level = 14;
+                xpLastLevel = 6500;
+                xpToNextLevel = 7000;
+            }
+            else if(xp < 7500) {
+
+                level = 15;
+                xpLastLevel = 7000;
+                xpToNextLevel = 7500;
+            }
+            else if(xp < 8000) {
+
+                level = 16;
+                xpLastLevel = 7500;
+                xpToNextLevel = 8000;
+            }
+            else if(xp < 8500) {
+
+                level = 17;
+                xpLastLevel = 8000;
+                xpToNextLevel = 8500;
+            }
+            else if(xp < 9000) {
+
+                level = 18;
+                xpLastLevel = 8500;
+                xpToNextLevel = 9000;
+            }
+            else if(xp < 9500) {
+
+                level = 19;
+                xpLastLevel = 9000;
+                xpToNextLevel = 9500;
+            }
+            else {
+
+                level = 20;
+                xpLastLevel = 9500;
+                xpToNextLevel = 1000;
+            }
+        }
+    })
+
+    experienceIndexes.forEach((item) => experiences.splice(item, 1));
 
 }

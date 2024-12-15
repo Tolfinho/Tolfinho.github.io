@@ -4,6 +4,7 @@ const c = canvas.getContext("2d");
 canvas.width = 1280;
 canvas.height = 800;
 
+var map;
 var player;
 var enemies = [];
 var bullets = [];
@@ -16,6 +17,100 @@ var xp = 0;
 var level = 0;
 var xpLastLevel = 0;
 var xpToNextLevel = 0;
+
+/*
+*   Map
+*/
+class Map {
+    constructor(){
+        this.map = [
+            ["*","*","*","*","*","*","*","*","*","*","*","*","*","*","*","*","*","*","*","*","*","*","*","*","*","*","*","*","*","*","*","*","*","*"],
+            ["*","1","2","1","2","1","2","1","2","1","2","1","2","1","2","1","2","1","2","1","2","1","2","1","2","1","2","1","2","1","2","1","2","*"],
+            ["*","2","1","2","1","2","1","2","1","2","1","2","1","2","1","2","1","2","1","2","1","2","1","2","1","2","1","2","1","2","1","2","1","*"],
+            ["*","1","2","1","2","1","2","1","2","1","2","1","2","1","2","1","2","1","2","1","2","1","2","1","2","1","2","1","2","1","2","1","2","*"],
+            ["*","2","1","2","1","2","1","2","1","2","1","2","1","2","1","2","1","2","1","2","1","2","1","2","1","2","1","2","1","2","1","2","1","*"],
+            ["*","1","2","1","2","1","2","1","2","1","2","1","2","1","2","1","2","1","2","1","2","1","2","1","2","1","2","1","2","1","2","1","2","*"],
+            ["*","2","1","2","1","2","1","2","1","2","1","2","1","2","1","2","1","2","1","2","1","2","1","2","1","2","1","2","1","2","1","2","1","*"],
+            ["*","1","2","1","2","1","2","1","2","1","2","1","2","1","2","1","2","1","2","1","2","1","2","1","2","1","2","1","2","1","2","1","2","*"],
+            ["*","2","1","2","1","2","1","2","1","2","1","2","1","2","1","2","1","2","1","2","1","2","1","2","1","2","1","2","1","2","1","2","1","*"],
+            ["*","1","2","1","2","1","2","1","2","1","2","1","2","1","2","1","2","1","2","1","2","1","2","1","2","1","2","1","2","1","2","1","2","*"],
+            ["*","2","1","2","1","2","1","2","1","2","1","2","1","2","1","2","1","2","1","2","1","2","1","2","1","2","1","2","1","2","1","2","1","*"],
+            ["*","1","2","1","2","1","2","1","2","1","2","1","2","1","2","1","2","1","2","1","2","1","2","1","2","1","2","1","2","1","2","1","2","*"],
+            ["*","2","1","2","1","2","1","2","1","2","1","2","1","2","1","2","1","2","1","2","1","2","1","2","1","2","1","2","1","2","1","2","1","*"],
+            ["*","1","2","1","2","1","2","1","2","1","2","1","2","1","2","1","2","1","2","1","2","1","2","1","2","1","2","1","2","1","2","1","2","*"],
+            ["*","2","1","2","1","2","1","2","1","2","1","2","1","2","1","2","1","2","1","2","1","2","1","2","1","2","1","2","1","2","1","2","1","*"],
+            ["*","1","2","1","2","1","2","1","2","1","2","1","2","1","2","1","2","1","2","1","2","1","2","1","2","1","2","1","2","1","2","1","2","*"],
+            ["*","2","1","2","1","2","1","2","1","2","1","2","1","2","1","2","1","2","1","2","1","2","1","2","1","2","1","2","1","2","1","2","1","*"],
+            ["*","1","2","1","2","1","2","1","2","1","2","1","2","1","2","1","2","1","2","1","2","1","2","1","2","1","2","1","2","1","2","1","2","*"],
+            ["*","2","1","2","1","2","1","2","1","2","1","2","1","2","1","2","1","2","1","2","1","2","1","2","1","2","1","2","1","2","1","2","1","*"],
+            ["*","1","2","1","2","1","2","1","2","1","2","1","2","1","2","1","2","1","2","1","2","1","2","1","2","1","2","1","2","1","2","1","2","*"],
+            ["*","2","1","2","1","2","1","2","1","2","1","2","1","2","1","2","1","2","1","2","1","2","1","2","1","2","1","2","1","2","1","2","1","*"],
+            ["*","1","2","1","2","1","2","1","2","1","2","1","2","1","2","1","2","1","2","1","2","1","2","1","2","1","2","1","2","1","2","1","2","*"],
+            ["*","2","1","2","1","2","1","2","1","2","1","2","1","2","1","2","1","2","1","2","1","2","1","2","1","2","1","2","1","2","1","2","1","*"],
+            ["*","1","2","1","2","1","2","1","2","1","2","1","2","1","2","1","2","1","2","1","2","1","2","1","2","1","2","1","2","1","2","1","2","*"],
+            ["*","2","1","2","1","2","1","2","1","2","1","2","1","2","1","2","1","2","1","2","1","2","1","2","1","2","1","2","1","2","1","2","1","*"],
+            ["*","1","2","1","2","1","2","1","2","1","2","1","2","1","2","1","2","1","2","1","2","1","2","1","2","1","2","1","2","1","2","1","2","*"],
+            ["*","2","1","2","1","2","1","2","1","2","1","2","1","2","1","2","1","2","1","2","1","2","1","2","1","2","1","2","1","2","1","2","1","*"],
+            ["*","1","2","1","2","1","2","1","2","1","2","1","2","1","2","1","2","1","2","1","2","1","2","1","2","1","2","1","2","1","2","1","2","*"],
+            ["*","2","1","2","1","2","1","2","1","2","1","2","1","2","1","2","1","2","1","2","1","2","1","2","1","2","1","2","1","2","1","2","1","*"],
+            ["*","*","*","*","*","*","*","*","*","*","*","*","*","*","*","*","*","*","*","*","*","*","*","*","*","*","*","*","*","*","*","*","*","*"],
+        ]
+
+        this.speed = 4;
+        this.dirX = 0;
+        this.dirY = 0;
+        this.offsetX = -100;
+        this.offsetY = -100;
+        this.size = 50;
+        this.borders = [];
+    }
+
+    update(){
+        if(map.offsetX + player.speed * (player.dirX * -1) >= 0){
+            if(!this.borders.includes("left"))
+                this.borders.push("left")
+        } else {
+            this.borders = this.borders.filter((border) => border !== "left")
+        }
+
+        if(map.offsetX + player.speed * (player.dirX * -1) - canvas.width <= -(map.map[0].length * map.size)){// -(map[0].length * map.size) calcula largura total do mapa)
+            if(!this.borders.includes("right"))
+                this.borders.push("right")
+        } else {
+            this.borders = this.borders.filter((border) => border !== "right")
+        }
+
+        if(map.offsetY + player.speed * (player.dirY * -1) >= 0){
+            if(!this.borders.includes("top"))
+                this.borders.push("top")
+        } else {
+            this.borders = this.borders.filter((border) => border !== "top")
+        }
+
+        if(map.offsetY + player.speed * (player.dirY * -1) - canvas.height <= -(map.map.length * map.size)){
+            if(!this.borders.includes("bottom"))
+                this.borders.push("bottom")
+        } else {
+            this.borders = this.borders.filter((border) => border !== "bottom")
+        }
+
+        console.log(this.borders);
+    }
+
+    draw(){
+        var color = "";
+        this.map.forEach((row, rowIndex) => {
+            row.forEach((col, colIndex) => {
+                if(col === "*") color = "#d0d"
+                else if(col === "1") color = "#0c0"
+                else if(col === "2") color = "#070"
+    
+                c.fillStyle = color;
+                c.fillRect(colIndex*this.size + this.offsetX, rowIndex*this.size + this.offsetY, this.size, this.size);
+            })
+        })
+    }
+}
 
 /*
 *   Classes
@@ -51,8 +146,22 @@ class Player {
             this.dirY = 0;
         }
 
-        this.x += this.speed * this.dirX;
-        this.y += this.speed * this.dirY;
+        //this.x += this.speed * this.dirX;
+        //this.y += this.speed * this.dirY;
+
+        if(map.offsetX + this.speed * (this.dirX * -1) <= 0
+            && map.offsetX + this.speed * (this.dirX * -1) - canvas.width >= -(map.map[0].length * map.size)){// -(map[0].length * map.size) calcula largura total do mapa
+            map.offsetX += this.speed * (this.dirX * -1); // * -1 pois se o player precisa andar para a direita, o mapa precisa se mover para a esquerda
+        } else {
+            player.x += this.speed * this.dirX;
+        }
+        
+        if(map.offsetY + this.speed * (this.dirY * -1) <= 0
+            && map.offsetY + this.speed * (this.dirY * -1) - canvas.height >= -(map.map.length * map.size)){
+            map.offsetY += this.speed * (this.dirY * -1); 
+        } else {
+            player.y += this.speed * this.dirY;
+        }
     }
 
     draw(){
@@ -89,8 +198,8 @@ class Enemy {
         }
 
         // Atualizar a posição do bot com o movimento uniforme
-        this.x += dx * this.speed; // Movimento em x
-        this.y += dy * this.speed; // Movimento em y
+        this.x += (dx * this.speed) + (map.speed * player.dirX * -1); // Movimento em x
+        this.y += (dy * this.speed) + (map.speed * player.dirY * -1); // Movimento em y
     }
 
     draw(){
@@ -160,6 +269,7 @@ startGame();
 function startGame() {
     drawScreen();
     
+    map = new Map();
     player = new Player((canvas.width)-(canvas.width/2)-(20), (canvas.height)-(canvas.height/2)-(20), 40, 40);
 
     animate();
@@ -168,6 +278,7 @@ function startGame() {
 function restartGame(){
     enemies = [];
     bullets = [];
+    experiences = [];
     mousePosition = { x: 0, y: 0 };
     sec = 0;
     min = 0;
@@ -175,6 +286,11 @@ function restartGame(){
     spawnEnemyTicks = 80
     spawnBulletTicks = 0;
     then = Date.now();
+    enemiesToSpawn = [];
+    xp = 0;
+    level = 0;
+    xpLastLevel = 0;
+    xpToNextLevel = 0;
 
     startGame();
 }
@@ -194,6 +310,9 @@ function animate () {
     
     if(difference > 1000 / fps){
         drawScreen();
+        map.update();
+        map.draw();
+        moveExperiencesWithMap();
 
         player.update();
         player.draw();
@@ -371,6 +490,14 @@ const gameTimer = setInterval(() => {
 /*
 *   Utilities
 */
+function moveExperiencesWithMap(){
+    // Move todas as pedras de experiência junto com o mapa
+    experiences.forEach((experience) => {
+        experience.x += (map.speed * player.dirX * -1)
+        experience.y += (map.speed * player.dirY * -1)
+    })
+}
+
 function getEnemySpawnPositions(){
     const orientation = Math.floor(Math.random() * 2);
     const side = Math.floor(Math.random() * 2);
@@ -418,7 +545,6 @@ function bulletCollisionWithEnemy(){
                 enemy.life -= 1;
                 if(enemy.life <= 0){
                     experiences.push(new Experience(enemy.x + Math.floor(enemy.width/2) - 5, enemy.y + Math.floor(enemy.height/2) - 5, 10, 10))
-                    console.log(enemy.width)
                     enemyIndex = index2;
                 }
             }
@@ -503,103 +629,86 @@ function playerCollisionWithExperiences(){
                 xpToNextLevel = 1500;
             }
             else if(xp < 2000) {
-
                 level = 4;
                 xpLastLevel = 1500;
                 xpToNextLevel = 2000;
             }
             else if(xp < 2500) {
-
                 level = 5;
                 xpLastLevel = 2000;
                 xpToNextLevel = 2500;
             }
             else if(xp < 3000) {
-
                 level = 6;
                 xpLastLevel = 2500;
                 xpToNextLevel = 3000;
             }
             else if(xp < 3500) {
-
                 level = 7;
                 xpLastLevel = 3000;
                 xpToNextLevel = 3500;
             }
             else if(xp < 4000) {
-
                 level = 8;
                 xpLastLevel = 3500;
                 xpToNextLevel = 4000;
             }
             else if(xp < 4500) {
-
                 level = 9;
                 xpLastLevel = 4000;
                 xpToNextLevel = 4500;
             }
             else if(xp < 5000) {
-
                 level = 10;
                 xpLastLevel = 4500;
                 xpToNextLevel = 5000;
             }
             else if(xp < 5500) {
-
                 level = 11;
                 xpLastLevel = 5000;
                 xpToNextLevel = 5500;
             }
             else if(xp < 6000) {
-
                 level = 12;
                 xpLastLevel = 5500;
                 xpToNextLevel = 6000;
             }
             else if(xp < 6500) {
-
                 level = 13;
                 xpLastLevel = 6000;
                 xpToNextLevel = 6500;
             }
             else if(xp < 7000) {
-
                 level = 14;
                 xpLastLevel = 6500;
                 xpToNextLevel = 7000;
             }
             else if(xp < 7500) {
-
                 level = 15;
                 xpLastLevel = 7000;
                 xpToNextLevel = 7500;
             }
             else if(xp < 8000) {
-
                 level = 16;
                 xpLastLevel = 7500;
                 xpToNextLevel = 8000;
             }
             else if(xp < 8500) {
-
                 level = 17;
                 xpLastLevel = 8000;
                 xpToNextLevel = 8500;
             }
             else if(xp < 9000) {
-
                 level = 18;
                 xpLastLevel = 8500;
                 xpToNextLevel = 9000;
             }
             else if(xp < 9500) {
-
                 level = 19;
                 xpLastLevel = 9000;
                 xpToNextLevel = 9500;
             }
             else {
-
                 level = 20;
                 xpLastLevel = 9500;
                 xpToNextLevel = 1000;
